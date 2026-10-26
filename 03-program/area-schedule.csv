@@ -1,0 +1,47 @@
+zone,space,quantity,unit_net_area_m2,total_net_area_m2,basis,phase_confirmed,notes
+guestrooms,standard double (two beds),,,,tourism regulation minimum / comp set,,
+guestrooms,standard king,,,,tourism regulation minimum / comp set,,
+guestrooms,accessible room,,,,CTE DB-SUA 9 and regional accessibility reglamento,,distribute across types and floors
+guestrooms,junior suite,,,,brief,,
+guestrooms,suite,,,,brief,,
+guestrooms,subtotal keys (must equal 150),150,,,AGENTS.md fixed requirement,,quantities above must sum to this
+guestrooms,corridor and floor support,,,,plan takeoff,,per typical floor
+arrival,vestibule and reception,,,,operator standard,,
+arrival,lobby lounge,,,,operator standard,,
+arrival,luggage and bell,,,,operator standard,,
+arrival,public toilets,,,,DB-SUA and tourism regulation,,
+fnb,breakfast restaurant dining,,,,covers x m2 per cover,,sized for peak breakfast at full occupancy
+fnb,dinner restaurant dining,,,,covers x m2 per cover,,sized for hotel guests plus external diners
+fnb,bar,,,,covers x m2 per cover,,
+fnb,main kitchen,,,,ratio to dining,,shared or separate kitchens is a decision in decision-log
+fnb,food storage and prep,,,,ratio to kitchen,,
+conference,main conference hall,,,,brief and market study,,
+conference,breakout rooms,,,,brief and market study,,
+conference,prefunction and foyer,,,,ratio to main hall,,
+conference,storage and AV,,,,ratio to main hall,,
+spa,reception and relaxation,,,,operator standard,,
+spa,treatment rooms,,,,operator standard,,
+spa,thermal circuit and pool,,,,brief,,
+spa,fitness,,,,operator standard,,
+spa,changing rooms,,,,regional pool sanitary regulation,,
+winery,grape reception and crush,,,,winery consultant,,seasonal; vehicle access at harvest
+winery,fermentation hall,,,,winery consultant,,
+winery,barrel cellar,,,,winery consultant,,temperature and humidity stable; below grade preferred
+winery,bottling and dry goods,,,,winery consultant,,
+winery,tasting room and shop,,,,brief,,guest-facing; adjacency to bar or lobby
+winery,laboratory and office,,,,winery consultant,,
+boh,receiving and loading,,,,operator standard,,
+boh,housekeeping and laundry,,,,ratio to keys,,
+boh,employee changing and dining,,,,ratio to staff count,,
+boh,administration offices,,,,operator standard,,
+boh,engineering and maintenance,,,,operator standard,,
+boh,general storage,,,,ratio to keys,,
+boh,waste and recycling,,,,operator standard,,
+systems,plant rooms (thermal and electrical),,,,engineer allowance,,
+systems,IT main and floor distribution rooms,,,,engineer allowance,,
+circulation,vertical cores,,,,plan takeoff,,
+circulation,protected stairs,,,,plan takeoff per DB-SI,,
+summary,total superficie util,,,,sum,,
+summary,gross-to-net factor,,,,target,,
+summary,total superficie construida,,,,calculated,,
+summary,total keys,150,,,AGENTS.md fixed requirement,,

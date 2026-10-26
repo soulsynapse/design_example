@@ -1,0 +1,46 @@
+# Instructional Merit
+
+Status: draft — YYYY-MM-DD
+Audience: the instructor evaluating this repository as a teaching instrument for a university architecture course.
+
+This document states why the package is structured as it is, what pedagogical claims that structure rests on, and where the structure works against good design teaching so the instructor can correct for it. It is the only file in the tree that argues rather than specifies.
+
+## What the instrument is
+
+A hotel design package for a 150-key vineyard resort in Soria, organised as a repository of scaffolded documents that students fill in phase order, with a persistent file (`AGENTS.md`) that carries the fixed requirements and working rules between sessions. The deliverables are deliberately narrow: floor plans and one rendered perspective. The rest of the tree exists to force students to make those two artefacts defensible against market, site, program, regulation, operations, and cost.
+
+## The process it deploys, and the case for it
+
+**Phase gates mapped to Spanish professional stages.** The plan follows the LOE stages (estudio previo, anteproyecto, proyecto básico) with AIA equivalents noted. Students meet the vocabulary and the deliverable expectations they will encounter in practice, and the gates give the instructor natural review points. This is the convention of the profession, not a pedagogical invention, which is the point: Lave and Wenger's account of legitimate peripheral participation holds that learning a practice means participating in its real forms, including its documents and review rituals, in reduced but authentic scope. The repository is a reduced but authentic professional document set.
+
+**Scaffolds with the questions written in, not the answers.** Each file lists the questions a section must answer and names the file that feeds it and the file it feeds. This is the scaffolding move in the Wood, Bruner, and Ross sense: the structure carries the metacognitive load (what must be decided, in what order, against what) so the student's attention goes to the design content. It also matches Collins, Brown, and Newman's cognitive apprenticeship: expert reasoning that is normally tacit (which adjacency is non-negotiable, why a number must have a cited basis) is made visible as a procedure the student performs before internalising it. The scaffold should fade. See the limits section.
+
+**One number, one owner.** The area schedule owns areas; the assumptions register owns financial inputs; everything else references by path. Beyond its practical value, this teaches that a design is a system of dependent commitments. A student who changes a room width learns, by being forced to update one file and watch the references, that the bay, the structure, the facade module, the key count, and the cost move with it. This is Lawson's point in *How Designers Think* that design problems are not decomposable into independent sub-problems; the repository makes non-decomposability a lived experience rather than a lecture.
+
+**Decision records and the ban on editing closed decisions.** Students must write down what was decided, what alternatives existed, and what the decision rules out. This externalises reflection in the sense Schön describes in *The Reflective Practitioner* and *Educating the Reflective Practitioner*: the design studio already teaches reflection-in-action through the desk crit, but it rarely teaches reflection-on-action in a durable form. The decision log is that form. The supersede-rather-than-edit rule teaches that design history is evidence and that reversing a decision has a cost that should be visible.
+
+**Fixed requirements separated from design decisions.** `AGENTS.md` partitions the brief into what the owner fixed (site, 150 keys, program elements, deliverables) and what the student decides (mix, massing, kitchens, cellar depth). Students routinely confuse constraints with preferences in both directions. Making the partition a file they must read first, and must not edit without the owner, teaches the professional posture toward a brief: argue with the client about it in the open, never redesign it quietly.
+
+**Narrow deliverables, wide evidence base.** Requiring only plans and one perspective, but requiring that they be traceable through market, site, program, regulation, operations, and cost, inverts the typical studio ratio of image to argument. This is backward design in Wiggins and McTighe's sense: the assessed artefacts are fixed first and every activity is justified by its contribution to them. A render that shows a material not in the palette, or a plan that cannot find its key count in the area schedule, fails on the record rather than on taste.
+
+**Cross-session persistence with an explicit handoff protocol.** Studio work is interrupted constantly. The rules in `AGENTS.md` (read the log first, update status lines, leave a session note) are a small version of the professional practice of document control. They also make a student's process gradeable: the instructor can read the decision log and session notes and see how the design was reasoned, not only what it looks like. This supports assessment of process, which NAAB and equivalent European accreditation criteria ask for and which studio grading usually approximates from the final pin-up.
+
+## Where the structure works against good teaching, and what to do about it
+
+**Linearity.** Numbered folders and gated phases suggest a waterfall. Real design iterates, and Schön's critique of technical rationality applies directly: a student who believes that completing the program folder before sketching is "the method" has learned the wrong lesson. The phase plan names two expected feedback loops, but the instructor should actively require at least one trip back through a closed gate during the course, with the decision record that goes with it, so that iteration is seen as the norm with a paper trail rather than as failure.
+
+**Proceduralism displacing judgment.** A scaffold this complete can be filled in without designing. Cross and Lawson both document that expert designers frame the problem through a primary generator or organising concept and then test it, rather than deriving the design from a complete analysis. The design narrative file asks for exactly that framing and demands that each principle rule something out, but the instructor should grade that file hardest and earliest. If the narrative is generic, the plans will be too, however complete the area schedule.
+
+**Expertise reversal.** Scaffolds that help novices hinder advanced students (Kalyuga's expertise-reversal effect, within the cognitive-load literature). For an upper-year or graduate cohort, the instructor should strip the section prompts from files in the later folders and leave only the headings and the cross-references, so that students supply the questions as well as the answers. The scaffold is meant to fade; the repository as delivered is set at the most supported level.
+
+**Regulation as checklist.** The CTE compliance file risks teaching code as a list to tick. It is better taught as a set of constraints that generate form: evacuation lengths set wing lengths, sector sizes set where fire walls fall, accessible dispersion sets which bays on which floors. The instructor should ask students to show, on the plans, one place where a code requirement changed the design, and to record it as a decision.
+
+**Document volume.** Thirty-odd files is a lot of writing for a design course. The instructor can mark whole folders out of scope for a shorter module (financials and detailed systems are the first candidates) without breaking the dependency chain, since the plans and render depend on them only through the area schedule and the facade strategy. Do not cut the brief, the site, the program, the decision log, or the open questions; those are the instrument.
+
+## What the instrument does not claim
+
+It does not teach drawing, modelling, or rendering skill; it assumes them. It does not replace the desk crit; it gives the crit a record to work from. It does not guarantee a good building; it guarantees that a bad one will be bad for reasons the student can find in their own files. The claim is that students who complete this package can defend their plans and their perspective against the questions a client, a planning officer, an operator, and a cost consultant would ask, and can show how they got there. Whether that transfers to the next project is the question the instructor is best placed to judge, and the decision logs across a cohort are a reasonable place to start looking.
+
+## Sources relied on
+
+Collins, Brown, and Newman on cognitive apprenticeship; Wood, Bruner, and Ross on scaffolding and its fading; Lave and Wenger on situated learning; Schön's *The Reflective Practitioner* and *Educating the Reflective Practitioner* (the latter is specifically about the architecture studio); Lawson's *How Designers Think*; Cross's *Designerly Ways of Knowing*; Wiggins and McTighe's *Understanding by Design*; Sweller and Kalyuga on cognitive load and the expertise-reversal effect. These are the foundational treatments rather than recent studies; the claim that this specific instrument improves outcomes is untested and should be read as a design hypothesis the course can evaluate.

@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Soria Vineyard Hotel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Proof-of-concept portfolio page: fly around the example scheme and compare it with the three example renders and the example plan sheet.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a full-bleed model viewer as the opening frame, a HUD over it; below, the stills as a drawing set
+     with their captions, then the plan sheet, then how it is built. Palette from the scheme's own materials. */
+  :root {
+    --bg: #ebe7df;          /* limestone, cool side */
+    --bg-2: #dfd9cd;        /* deeper limestone band */
+    --fg: #1e1c19;          /* ink */
+    --fg-2: #5d574e;        /* muted ink */
+    --line: #c9c2b4;
+    --accent: #8a5a2b;      /* timber */
+    --accent-2: #3f5a2a;    /* vine */
+    --ember: #d2733c;       /* dusk glazing */
+    --hud: rgba(30, 28, 25, 0.78);
+    --hud-fg: #efe9dd;
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Newsreader", Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1a18; --bg-2: #242220; --fg: #ece6da; --fg-2: #a89f91; --line: #3a3733;
+      --accent: #c48a4e; --accent-2: #8fae63; --ember: #e8925a; --hud: rgba(20, 19, 17, 0.82); --hud-fg: #efe9dd;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1a18; --bg-2: #242220; --fg: #ece6da; --fg-2: #a89f91; --line: #3a3733;
+    --accent: #c48a4e; --accent-2: #8fae63; --ember: #e8925a; --hud: rgba(20, 19, 17, 0.82); --hud-fg: #efe9dd;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 18px; line-height: 1.5; }
+  .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  header.top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding-block: 18px 14px; border-bottom: 1px solid var(--line); }
+  .wordmark { font-family: var(--display); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; margin: 0; }
+  .wordmark span { color: var(--accent); }
+  .eyebrow { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+
+  /* viewer */
+  .stage { position: relative; height: min(78vh, 900px); min-height: 420px; background: #2a2724; overflow: hidden; }
+  .stage canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+  .hud { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-wrap: wrap; gap: 8px; pointer-events: none; }
+  .hud.topbar { top: 14px; align-items: flex-start; justify-content: space-between; }
+  .hud.bottombar { bottom: 14px; align-items: flex-end; justify-content: space-between; }
+  .hud > * { pointer-events: auto; }
+  .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: var(--hud); color: var(--hud-fg); padding: 6px; border-radius: 4px; backdrop-filter: blur(6px); }
+  .group .lbl { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.7; padding: 0 6px; }
+  .chip { font-family: var(--display); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.02em; color: var(--hud-fg); background: transparent; border: 1px solid rgba(239, 233, 221, 0.35); border-radius: 3px; padding: 6px 10px; cursor: pointer; }
+  .chip:hover { border-color: rgba(239, 233, 221, 0.8); }
+  .chip[aria-pressed="true"] { background: var(--hud-fg); color: #1e1c19; border-color: var(--hud-fg); }
+  .chip:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+  .caption { max-width: 60ch; background: var(--hud); color: var(--hud-fg); padding: 10px 14px; border-radius: 4px; font-family: var(--mono); font-size: 0.78rem; line-height: 1.45; }
+  .caption b { font-weight: 500; color: var(--ember); }
+  .help { font-family: var(--mono); font-size: 0.72rem; line-height: 1.5; opacity: 0.85; padding: 4px 8px; }
+  .help kbd { font-family: inherit; border: 1px solid rgba(239, 233, 221, 0.4); border-radius: 2px; padding: 0 4px; }
+  .notice { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ember); padding: 4px; background: rgba(20, 19, 17, 0.55); pointer-events: none; }
+
+  /* content */
+  main { display: grid; gap: 56px; padding-block: 48px 72px; max-width: 1240px; margin-inline: auto; }
+  h1 { font-family: var(--display); font-weight: 800; font-size: clamp(1.9rem, 4.2vw, 3.2rem); line-height: 1.02; letter-spacing: -0.015em; margin: 0 0 14px; text-wrap: balance; }
+  h2 { font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: 0.005em; margin: 0 0 10px; text-wrap: balance; }
+  p { margin: 0 0 1em; max-width: 68ch; }
+  .lede { font-size: 1.22rem; line-height: 1.45; max-width: 60ch; }
+  .intro { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 32px 56px; align-items: start; }
+  .facts { display: grid; grid-template-columns: auto 1fr; gap: 8px 18px; font-family: var(--mono); font-size: 0.8rem; line-height: 1.5; border-top: 1px solid var(--line); padding-top: 14px; min-width: 0; }
+  .facts dt { color: var(--fg-2); margin: 0; }
+  .facts dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .set { display: grid; gap: 36px; }
+  figure { margin: 0; display: grid; gap: 10px; min-width: 0; }
+  figure img { width: 100%; max-width: 100%; height: auto; display: block; border: 1px solid var(--line); background: var(--bg-2); }
+  figcaption { display: grid; grid-template-columns: auto 1fr auto; gap: 6px 16px; align-items: baseline; font-family: var(--mono); font-size: 0.78rem; line-height: 1.5; color: var(--fg-2); }
+  figcaption .code { font-family: var(--display); font-weight: 800; font-size: 1rem; color: var(--fg); }
+  figcaption .shows { font-family: var(--body); font-size: 1rem; color: var(--fg); grid-column: 1 / -1; max-width: 70ch; }
+  figcaption button { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em; color: var(--accent); background: none; border: 1px solid var(--line); border-radius: 3px; padding: 4px 8px; cursor: pointer; white-space: nowrap; }
+  figcaption button:hover { border-color: var(--accent); }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 28px 48px; }
+  .two p:last-child { margin-bottom: 0; }
+  code { font-family: var(--mono); font-size: 0.85em; }
+  footer { border-top: 1px solid var(--line); padding-block: 18px 28px; font-family: var(--mono); font-size: 0.74rem; color: var(--fg-2); line-height: 1.6; }
+  @media (max-width: 760px) {
+    .intro { grid-template-columns: 1fr; }
+    .stage { height: min(68vh, 640px); }
+    .help { display: none; }
+    .caption { max-width: 100%; font-size: 0.72rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<header class="top gutter">
+  <p class="wordmark">Hotel en el viñedo <span>· Soria</span></p>
+  <span class="eyebrow">Prueba de concepto · ejemplo ilustrativo · no es el proyecto</span>
+</header>
+
+<section class="stage" aria-label="Interactive model of the example scheme">
+  <canvas id="view" tabindex="0" aria-label="3D model. Drag to orbit, scroll to zoom, W A S D to fly."></canvas>
+  <div class="hud topbar">
+    <div class="group" role="group" aria-label="Views">
+      <span class="lbl">Vista</span>
+      <button class="chip" id="btn-R-01" data-view="R-01" aria-pressed="true">R-01</button>
+      <button class="chip" id="btn-R-02" data-view="R-02" aria-pressed="false">R-02</button>
+      <button class="chip" id="btn-R-03" data-view="R-03" aria-pressed="false">R-03</button>
+    </div>
+    <div class="group" role="group" aria-label="Season">
+      <span class="lbl">Estación</span>
+      <button class="chip" id="btn-harvest" data-season="harvest" aria-pressed="true">vendimia</button>
+      <button class="chip" id="btn-spring" data-season="spring" aria-pressed="false">mayo</button>
+      <button class="chip" id="btn-winter" data-season="winter" aria-pressed="false">enero</button>
+    </div>
+  </div>
+  <div class="hud bottombar">
+    <div class="caption" id="caption"><b>R-01</b> · cargando el modelo…</div>
+    <div class="group">
+      <span class="help">arrastrar <kbd>orbitar</kbd> · rueda <kbd>acercar</kbd> · <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> volar · <kbd>Q</kbd>/<kbd>E</kbd> subir/bajar · botón derecho <kbd>desplazar</kbd></span>
+      <button class="chip" id="btn-full" type="button">Pantalla completa</button>
+    </div>
+  </div>
+  <div class="notice">Prueba de concepto — geometría inventada para el ejemplo</div>
+</section>
+
+<main class="gutter">
+  <section class="intro">
+    <div>
+      <h1>One scheme, three stills, and a model you can fly through</h1>
+      <p class="lede">This page shows what the two final deliverables of the Soria vineyard hotel package look like when they are finished: the floor plan sheet and the rendered exterior perspective. Nothing here is the design. The geometry, the materials, the viewpoints and the light were invented to demonstrate format and level of finish.</p>
+      <p>The model above and the three stills below are produced from a single description of the example scheme. Each still is a camera placed in that model, with a season and an hour chosen to show one thing clearly. Press a view button to jump to that camera, then drag or fly away from it to check what the still leaves out.</p>
+    </div>
+    <dl class="facts" aria-label="Example scheme facts">
+      <dt>Programme (owner-fixed)</dt><dd>150 keys · winery · conference · two restaurants · bar · spa</dd>
+      <dt>Example site grid</dt><dd>vine rows N–S at 2,50 m</dd>
+      <dt>Example materials</dt><dd>limestone plinth · timber fascia and fins · glazed gallery</dd>
+      <dt>Example stills</dt><dd>3840 × 2160 px, captioned with view, season and hour</dd>
+      <dt>Example sheet</dt><dd>A0 landscape, 1:100, UNE-EN ISO 5457 / 7200</dd>
+      <dt>Model source</dt><dd><code>generators/make_render.py</code> → <code>scene.js</code></dd>
+    </dl>
+  </section>
+
+  <section class="set" aria-label="Example renders">
+    <figure>
+      <img src="R-01-perspectiva-ejemplo.jpg" alt="Elevated view from inside the vineyard towards the patio and glazed gallery, harvest season, low evening sun" width="3840" height="2160" loading="lazy">
+      <figcaption>
+        <span class="code">R-01</span><span>Vista exterior desde el viñedo, hacia el patio y la galería · vendimia, 18:45</span><button type="button" data-goto="R-01">ver en el modelo</button>
+        <span class="shows">The one perspective the brief actually asks for. It is the view that has to prove the building's relationship to the vine rows, so the camera sits a few metres above the canopy and the sun is low enough to draw the rows and the timber fins as lines.</span>
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="R-02-perspectiva-ejemplo.jpg" alt="Eye-level view from the vines across the patio to the gallery and guestroom floors, spring morning" width="3840" height="2160" loading="lazy">
+      <figcaption>
+        <span class="code">R-02</span><span>Patio entre spa y congresos, hacia la galería y las plantas de habitaciones · mayo, 9:30</span><button type="button" data-goto="R-02">ver en el modelo</button>
+        <span class="shows">Eye level, in May, with the shoots still short: the view a guest gets walking in from the vines. It tests the materials and the brise-soleil at human scale, which an elevated view flatters and hides.</span>
+      </figcaption>
+    </figure>
+    <figure>
+      <img src="R-03-perspectiva-ejemplo.jpg" alt="Oblique aerial view from the south-west at dusk in January, the building lit from within among bare vine rows" width="3840" height="2160" loading="lazy">
+      <figcaption>
+        <span class="code">R-03</span><span>Vista aérea oblicua desde el suroeste: conjunto en el viñedo · enero, 17:40, ocaso</span><button type="button" data-goto="R-03">ver en el modelo</button>
+        <span class="shows">Winter dormancy at dusk, from the air. With the leaf gone the vineyard reads as pure structure and the lit glazing shows where the public rooms are. This is the massing view: all the programme parts and how they sit in the rows, in one frame.</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="set" aria-label="Example plan sheet">
+    <figure>
+      <img src="A-101-planta-baja-ejemplo.png" alt="Example A0 ground floor plan sheet at 1:100 with title block, grid, room codes and areas" width="5149" height="3642" loading="lazy">
+      <figcaption>
+        <span class="code">A-101</span><span>Planta baja · ejemplo · A0 · 1:100</span><span></span>
+        <span class="shows">The other deliverable. Sheet frame and title block per the ISO conventions named in the package standards, structural grid, section marks, room codes with superficie útil computed from the drawn geometry, and general notes that cite the CTE documents the real sheet will have to satisfy.</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="two" aria-label="How it is built">
+    <div>
+      <h2>How the model and the stills stay consistent</h2>
+      <p>A single Python script holds the scheme as a list of boxes in metres, a vine-row rule, a few trees and figures, and a table of views. Run with a view name it renders that still through a pinhole camera. Run in scene mode it writes the same boxes, rows and view table to a small file this page loads. Change the scheme once and both outputs change.</p>
+      <p>The view buttons above set the model's camera to the still's exact eye point, target and field of view, and its sun to the still's hour. Season changes only the canopy, so you can see the January structure from the May viewpoint if you want to.</p>
+    </div>
+    <div>
+      <h2>What the real deliverables must add</h2>
+      <p>The example plan shows one floor and stubs the guestroom wing; the real package needs every distinct level, with areas reconciled to the area schedule. The example stills are flat-shaded; the real perspective comes from the modelling route recorded in the package and may show only what exists in the floor plans.</p>
+      <p>Everything on this page is a floor, not a ceiling. The owning files in the package remain the only source for any number, dimension or decision.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="gutter">
+  Prueba de concepto · hotel en el viñedo, Soria · la geometría, las áreas, los materiales y los puntos de vista se inventaron para el ejemplo y no resuelven ninguna cuestión del proyecto.
+</footer>
+
+<script src="scene.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.152.2/three.min.js"></script>
+<script>
+(function () {
+  const S = window.SCENE;
+  const canvas = document.getElementById('view');
+  const captionEl = document.getElementById('caption');
+  if (!S || !window.THREE) { captionEl.innerHTML = '<b>Modelo</b> · no se pudo cargar scene.js o three.js'; return; }
+
+  // ----- helpers: plan metres (x east, y north, z up) -> three (x, y up, z south) -----
+  const P = (x, y, z) => new THREE.Vector3(x, z, -y);
+  const col = (c) => new THREE.Color().setRGB(c[0], c[1], c[2], THREE.SRGBColorSpace);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.useLegacyLights = false;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, 16 / 9, 0.3, 3000);
+
+  // ----- sky dome (gradient) -----
+  const skyUni = { top: { value: new THREE.Color() }, hor: { value: new THREE.Color() }, soil: { value: new THREE.Color() } };
+  const sky = new THREE.Mesh(new THREE.SphereGeometry(1400, 32, 16), new THREE.ShaderMaterial({
+    side: THREE.BackSide, depthWrite: false, fog: false, uniforms: skyUni,
+    vertexShader: 'varying vec3 vW; void main(){ vW = (modelMatrix * vec4(position,1.0)).xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: 'uniform vec3 top; uniform vec3 hor; uniform vec3 soil; varying vec3 vW; void main(){ float h = normalize(vW).y; vec3 c = h > 0.0 ? mix(hor, top, pow(h, 0.55)) : mix(hor, soil, clamp(-h*6.0,0.0,1.0)); gl_FragColor = vec4(c,1.0); }'
+  }));
+  sky.position.set(50, 0, -30);
+  scene.add(sky);
+
+  // ----- lights -----
+  const sun = new THREE.DirectionalLight(0xffffff, 3.0);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(4096, 4096);
+  const sc = sun.shadow.camera; sc.left = -220; sc.right = 220; sc.top = 220; sc.bottom = -220; sc.near = 1; sc.far = 1200;
+  sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.05;
+  const sunTarget = new THREE.Object3D(); sunTarget.position.set(50, 0, -25); scene.add(sunTarget); sun.target = sunTarget;
+  scene.add(sun);
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x887766, 1.0);
+  scene.add(hemi);
+
+  // ----- materials -----
+  const matCache = new Map();
+  function lambert(c, opts) {
+    const key = c.join(',') + (opts ? JSON.stringify(opts) : '');
+    if (!matCache.has(key)) matCache.set(key, new THREE.MeshLambertMaterial(Object.assign({ color: col(c) }, opts || {})));
+    return matCache.get(key);
+  }
+  const glassMats = [];
+  function glassMat(c) {
+    const m = new THREE.MeshStandardMaterial({ color: col(c), roughness: 0.15, metalness: 0.6, emissive: new THREE.Color(0x000000), emissiveIntensity: 0 });
+    glassMats.push(m); return m;
+  }
+  const LAMP = col([0.98, 0.80, 0.52]);
+
+  // ----- ground & paving -----
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(2400, 2400), lambert([0.60, 0.50, 0.37]));
+  ground.rotation.x = -Math.PI / 2; ground.position.set(50, 0, -30); ground.receiveShadow = true; scene.add(ground);
+  const groundMat = ground.material;
+  S.paving.forEach(([quad, c]) => {
+    const xs = quad.map(q => q[0]), ys = quad.map(q => q[1]);
+    const shape = new THREE.Shape(quad.map(q => new THREE.Vector2(q[0], -q[1])));
+    const g = new THREE.ShapeGeometry(shape); g.rotateX(-Math.PI / 2);
+    const m = new THREE.Mesh(g, lambert(c)); m.position.y = 0.03; m.receiveShadow = true; scene.add(m);
+  });
+
+  // ----- boxes -----
+  const unit = new THREE.BoxGeometry(1, 1, 1);
+  const buildings = new THREE.Group(); scene.add(buildings);
+  S.boxes.forEach(([x0, y0, z0, x1, y1, z1, c, rc, kind]) => {
+    const w = x1 - x0, d = y1 - y0, h = z1 - z0;
+    let mesh;
+    if (kind === 'glass') {
+      mesh = new THREE.Mesh(unit, glassMat(c));
+    } else {
+      const wall = lambert(c), roof = lambert(rc);
+      mesh = new THREE.Mesh(unit, [wall, wall, roof, wall, wall, wall]);   // +x,-x,+y(top),-y,+z,-z
+    }
+    mesh.scale.set(w, h, d);
+    mesh.position.set(x0 + w / 2, z0 + h / 2, -(y0 + d / 2));
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    buildings.add(mesh);
+  });
+
+  // ----- trees (Quercus ilex as ellipsoid canopies) -----
+  const canopyGeo = new THREE.SphereGeometry(1, 20, 14), trunkGeo = new THREE.CylinderGeometry(1, 1, 1, 10);
+  const canopyMat = lambert([0.28, 0.36, 0.19]), trunkMat = lambert([0.22, 0.17, 0.12]);
+  S.trees.forEach(([x, y, r, hgt]) => {
+    const c = new THREE.Mesh(canopyGeo, canopyMat); c.scale.set(r, r * 0.75, r); c.position.copy(P(x, y, hgt)); c.castShadow = true; scene.add(c);
+    const t = new THREE.Mesh(trunkGeo, trunkMat); t.scale.set(0.16 * r, hgt, 0.16 * r); t.position.copy(P(x, y, hgt / 2)); t.castShadow = true; scene.add(t);
+  });
+
+  // ----- people (1,70 m) -----
+  const bodyGeo = new THREE.CylinderGeometry(0.17, 0.2, 1.45, 10), headGeo = new THREE.SphereGeometry(0.12, 12, 10);
+  S.people.forEach(([x, y, c]) => {
+    const m = lambert(c);
+    const b = new THREE.Mesh(bodyGeo, m); b.position.copy(P(x, y, 0.725)); b.castShadow = true; scene.add(b);
+    const h = new THREE.Mesh(headGeo, m); h.position.copy(P(x, y, 1.58)); h.castShadow = true; scene.add(h);
+  });
+
+  // ----- vines: instanced runs, rebuilt per season -----
+  const vineMesh = new THREE.InstancedMesh(unit, new THREE.MeshLambertMaterial({ color: 0xffffff }), S.vines.length);
+  vineMesh.castShadow = true; vineMesh.receiveShadow = true; scene.add(vineMesh);
+  const postMesh = new THREE.InstancedMesh(unit, lambert([0.36, 0.30, 0.22]), S.vines.length * 2);
+  postMesh.castShadow = true; scene.add(postMesh);
+  const trunkRows = new THREE.InstancedMesh(unit, lambert([0.30, 0.22, 0.14]), S.vines.length);
+  scene.add(trunkRows);
+  const M = new THREE.Matrix4(), tmpC = new THREE.Color();
+  function setSeason(key) {
+    const sp = S.seasons[key];
+    const a = new THREE.Color().setRGB(sp.a[0], sp.a[1], sp.a[2], THREE.SRGBColorSpace);
+    const b = new THREE.Color().setRGB(sp.b[0], sp.b[1], sp.b[2], THREE.SRGBColorSpace);
+    S.vines.forEach(([x, y0, y1, t], i) => {
+      const len = y1 - y0, hh = sp.h - sp.z0, w = 2 * sp.w;
+      M.makeScale(w, hh, len); M.setPosition(x, sp.z0 + hh / 2, -(y0 + len / 2)); vineMesh.setMatrixAt(i, M);
+      tmpC.copy(a).lerp(b, sp.mix * t); vineMesh.setColorAt(i, tmpC);
+      M.makeScale(0.06, sp.z0 + 0.05, len); M.setPosition(x, (sp.z0 + 0.05) / 2, -(y0 + len / 2)); trunkRows.setMatrixAt(i, M);
+      M.makeScale(0.12, 1.9, 0.12); M.setPosition(x, 0.95, -y0); postMesh.setMatrixAt(2 * i, M);
+      M.setPosition(x, 0.95, -y1); postMesh.setMatrixAt(2 * i + 1, M);
+    });
+    vineMesh.instanceMatrix.needsUpdate = true; vineMesh.instanceColor.needsUpdate = true;
+    trunkRows.instanceMatrix.needsUpdate = true; postMesh.instanceMatrix.needsUpdate = true;
+    document.querySelectorAll('[data-season]').forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.season === key)));
+  }
+
+  // ----- lighting preset from a view -----
+  function setLight(v) {
+    const az = v.sun_az * Math.PI / 180, el = v.sun_el * Math.PI / 180;
+    const dir = P(Math.cos(el) * Math.cos(az), Math.cos(el) * Math.sin(az), Math.sin(el));
+    sun.position.copy(sunTarget.position).addScaledVector(dir, 600);
+    sun.color.copy(col(v.sun_col));
+    sun.intensity = v.sun_el > 8 ? 3.8 : 1.6;
+    hemi.color.copy(col(v.sky_amb)); hemi.groundColor.copy(col(v.soil_near)); hemi.intensity = v.emissive ? 0.9 : 1.5;
+    skyUni.top.value.copy(col(v.sky_top)); skyUni.hor.value.copy(col(v.sky_hor)); skyUni.soil.value.copy(col(v.soil_near));
+    const fogc = col(v.fog_col);
+    scene.fog = new THREE.Fog(fogc, 80, v.fog_k * 2.6);
+    groundMat.color.copy(col(v.soil_far)).lerp(col(v.soil_near), 0.5);
+    glassMats.forEach(m => { m.emissive.copy(v.emissive ? LAMP : new THREE.Color(0)); m.emissiveIntensity = v.emissive ? 1.6 : 0; });
+    renderer.toneMappingExposure = v.emissive ? 0.9 : 1.18;
+  }
+
+  // ----- camera controls: orbit about a target, WASD moves the target (fly), right-drag pans -----
+  const ctl = { target: new THREE.Vector3(), yaw: 0, pitch: 0.3, dist: 60, keys: {}, idle: !reduced, lastUser: 0 };
+  function applyCamera() {
+    ctl.pitch = Math.max(-1.45, Math.min(1.45, ctl.pitch));
+    ctl.dist = Math.max(1.5, Math.min(900, ctl.dist));
+    const cp = Math.cos(ctl.pitch);
+    const eye = new THREE.Vector3(ctl.target.x + ctl.dist * cp * Math.sin(ctl.yaw), ctl.target.y + ctl.dist * Math.sin(ctl.pitch), ctl.target.z + ctl.dist * cp * Math.cos(ctl.yaw));
+    if (eye.y < 0.6) { eye.y = 0.6; }
+    camera.position.copy(eye); camera.lookAt(ctl.target);
+  }
+  function setView(key, animate) {
+    const v = S.views[key];
+    const eye = P(v.eye[0], v.eye[1], v.eye[2]), tgt = P(v.tgt[0], v.tgt[1], v.tgt[2]);
+    const d = eye.clone().sub(tgt);
+    const goal = { target: tgt, dist: d.length(), yaw: Math.atan2(d.x, d.z), pitch: Math.asin(d.y / d.length()) };
+    const vfov = 2 * Math.atan(Math.tan(v.hfov * Math.PI / 360) * 9 / 16) * 180 / Math.PI;
+    camera.fov = vfov; camera.updateProjectionMatrix();
+    setLight(v); setSeason(v.season);
+    document.querySelectorAll('[data-view]').forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.view === key)));
+    captionEl.innerHTML = '<b>' + key + '</b> · ' + v.caption.replace(/^R-0\d\s+·\s+/, '');
+    currentView = key;
+    if (animate && !reduced) { tween = { from: { target: ctl.target.clone(), dist: ctl.dist, yaw: ctl.yaw, pitch: ctl.pitch }, to: goal, t: 0 }; }
+    else { Object.assign(ctl, { target: goal.target, dist: goal.dist, yaw: goal.yaw, pitch: goal.pitch }); tween = null; applyCamera(); }
+  }
+  let currentView = 'R-01', tween = null;
+  function leavePreset() {
+    if (currentView) { captionEl.innerHTML = '<b>vista libre</b> · partiendo de ' + currentView + ' · ' + S.views[currentView].caption.split('·').slice(-1)[0].trim(); currentView = null; }
+    document.querySelectorAll('[data-view]').forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+    ctl.idle = false; tween = null;
+  }
+
+  let drag = null;
+  canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); drag = { x: e.clientX, y: e.clientY, b: e.button, pts: new Map([[e.pointerId, [e.clientX, e.clientY]]]) }; canvas.focus(); });
+  canvas.addEventListener('pointermove', e => {
+    if (!drag) return;
+    drag.pts.set(e.pointerId, [e.clientX, e.clientY]);
+    if (drag.pts.size >= 2) {                                        // pinch: zoom
+      const [a, b] = [...drag.pts.values()];
+      const dd = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (drag.pinch) { ctl.dist *= drag.pinch / dd; leavePreset(); applyCamera(); }
+      drag.pinch = dd; return;
+    }
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+    if (drag.b === 2 || e.ctrlKey || e.shiftKey) {                     // pan in the view plane
+      const r = new THREE.Vector3(), u = new THREE.Vector3();
+      camera.matrix.extractBasis(r, u, new THREE.Vector3());
+      const k = ctl.dist * 0.0016;
+      ctl.target.addScaledVector(r, -dx * k).addScaledVector(u, dy * k);
+    } else { ctl.yaw -= dx * 0.005; ctl.pitch += dy * 0.004; }
+    leavePreset(); applyCamera();
+  });
+  const endDrag = e => { if (drag) { drag.pts.delete(e.pointerId); if (!drag.pts.size) drag = null; else drag.pinch = null; } };
+  canvas.addEventListener('pointerup', endDrag); canvas.addEventListener('pointercancel', endDrag);
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+  canvas.addEventListener('wheel', e => { e.preventDefault(); ctl.dist *= Math.exp(e.deltaY * 0.0012); leavePreset(); applyCamera(); }, { passive: false });
+  canvas.addEventListener('keydown', e => { const k = e.key.toLowerCase(); if ('wasdqe'.includes(k)) { ctl.keys[k] = true; e.preventDefault(); } });
+  canvas.addEventListener('keyup', e => { ctl.keys[e.key.toLowerCase()] = false; });
+  canvas.addEventListener('blur', () => { ctl.keys = {}; });
+
+  document.querySelectorAll('[data-view]').forEach(btn => btn.addEventListener('click', () => { ctl.idle = false; setView(btn.dataset.view, true); }));
+  document.querySelectorAll('[data-goto]').forEach(btn => btn.addEventListener('click', () => { ctl.idle = false; setView(btn.dataset.goto, false); document.querySelector('.stage').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); }));
+  document.querySelectorAll('[data-season]').forEach(btn => btn.addEventListener('click', () => setSeason(btn.dataset.season)));
+  document.getElementById('btn-full').addEventListener('click', () => {
+    const st = document.querySelector('.stage');
+    if (document.fullscreenElement) { document.exitFullscreen && document.exitFullscreen().catch(() => {}); }
+    else if (st.requestFullscreen) { st.requestFullscreen().catch(() => {}); }
+  });
+
+  // ----- resize & loop -----
+  function resize() {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (canvas.width !== Math.floor(w * renderer.getPixelRatio()) || canvas.height !== Math.floor(h * renderer.getPixelRatio())) {
+      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    }
+  }
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    resize();
+    if (tween) {
+      tween.t = Math.min(1, tween.t + dt / 1.4); const s = tween.t < 0.5 ? 2 * tween.t * tween.t : 1 - Math.pow(-2 * tween.t + 2, 2) / 2;
+      ctl.target.lerpVectors(tween.from.target, tween.to.target, s);
+      ctl.dist = tween.from.dist + (tween.to.dist - tween.from.dist) * s;
+      let dy = tween.to.yaw - tween.from.yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+      ctl.yaw = tween.from.yaw + dy * s; ctl.pitch = tween.from.pitch + (tween.to.pitch - tween.from.pitch) * s;
+      if (tween.t >= 1) tween = null;
+      applyCamera();
+    } else if (ctl.idle) { ctl.yaw += dt * 0.025; applyCamera(); }
+    const k = ctl.keys; const moving = k.w || k.a || k.s || k.d || k.q || k.e;
+    if (moving) {
+      const f = new THREE.Vector3(), r = new THREE.Vector3(), u = new THREE.Vector3(0, 1, 0);
+      camera.getWorldDirection(f); f.y = 0; f.normalize(); r.crossVectors(f, u);
+      const sp = Math.max(4, ctl.dist * 0.6) * dt;
+      if (k.w) ctl.target.addScaledVector(f, sp); if (k.s) ctl.target.addScaledVector(f, -sp);
+      if (k.d) ctl.target.addScaledVector(r, sp); if (k.a) ctl.target.addScaledVector(r, -sp);
+      if (k.e) ctl.target.y += sp; if (k.q) ctl.target.y = Math.max(0.3, ctl.target.y - sp);
+      leavePreset(); applyCamera();
+    }
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  setView('R-01', false);
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
